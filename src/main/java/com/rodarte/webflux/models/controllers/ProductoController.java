@@ -68,4 +68,23 @@ public class ProductoController {
 
     }
 
+    @GetMapping("/listar-full")
+    private String listarFull(Model model) {
+
+        Flux<Producto> productos =
+            productoDao
+                .findAll()
+                .map(producto -> {
+                    producto.setNombre(producto.getNombre().toUpperCase());
+                    return producto;
+                })
+                .repeat(5000);
+
+        model.addAttribute("productos", new ReactiveDataDriverContextVariable(productos, 1));
+        model.addAttribute("titulo", "Listado de productos");
+
+        return "listar";
+
+    }
+
 }
