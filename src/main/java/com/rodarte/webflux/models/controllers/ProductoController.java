@@ -22,7 +22,7 @@ public class ProductoController {
     private static final Logger logger = LoggerFactory.getLogger(ProductoController.class);
 
     @GetMapping({ "/", "/listar" })
-    private String listar(Model model) {
+    public String listar(Model model) {
 
         Flux<Producto> productos =
             productoDao
@@ -45,7 +45,7 @@ public class ProductoController {
     }
 
     @GetMapping("/listar-data-driver")
-    private String listarDataDriver(Model model) {
+    public String listarDataDriver(Model model) {
 
         Flux<Producto> productos =
             productoDao
@@ -69,7 +69,7 @@ public class ProductoController {
     }
 
     @GetMapping("/listar-full")
-    private String listarFull(Model model) {
+    public String listarFull(Model model) {
 
         Flux<Producto> productos =
             productoDao
@@ -84,6 +84,25 @@ public class ProductoController {
         model.addAttribute("titulo", "Listado de productos");
 
         return "listar";
+
+    }
+
+    @GetMapping("/listar-chunked")
+    public String listarChunked(Model model) {
+
+        Flux<Producto> productos =
+            productoDao
+                .findAll()
+                .map(producto -> {
+                    producto.setNombre(producto.getNombre().toUpperCase());
+                    return producto;
+                })
+                .repeat(5000);
+
+        model.addAttribute("productos", new ReactiveDataDriverContextVariable(productos, 1));
+        model.addAttribute("titulo", "Listado de productos");
+
+        return "listar-chunked";
 
     }
 
