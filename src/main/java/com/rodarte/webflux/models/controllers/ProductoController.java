@@ -81,15 +81,29 @@ public class ProductoController {
 
         sessionStatus.setComplete();
 
-        if (producto.getCreatedAt() == null) {
-            producto.setCreatedAt(new Date());
-        }
+        Mono<Categoria> categoria = productoService.findCategoriaById(producto.getCategoria().getId());
 
         // thenReturn: permite retornar un Mono cuando un Observable completa; permitira redirigir cuando
         // el producto haya sido salvado
-        return productoService
-                .save(producto)
-                .doOnNext(p -> logger.info("Producto guardado: " + p.getNombre() + " Id: " + p.getId()))
+        return
+            categoria
+                .flatMap(
+                    c -> {
+
+                        producto.setCategoria(c);
+
+                        if (producto.getCreatedAt() == null) {
+                            producto.setCreatedAt(new Date());
+                        }
+
+                        return productoService.save(producto);
+
+                    }
+                )
+                .doOnNext(p -> {
+                    logger.info("Categoria asignada: " + p.getCategoria().getNombre() + " Id Cat: " + p.getCategoria().getId());
+                    logger.info("Producto guardado: " + p.getNombre() + " Id: " + p.getId());
+                })
                 .thenReturn("redirect:/listar?success=producto+guardado+con+exito");
 
     }

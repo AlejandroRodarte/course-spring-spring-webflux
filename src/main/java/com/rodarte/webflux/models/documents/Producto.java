@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -23,6 +24,7 @@ public class Producto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createdAt;
 
+    @Valid
     private Categoria categoria;
 
     public Producto() {

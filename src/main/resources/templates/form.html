@@ -118,15 +118,15 @@
                             >
                             </option>
 
-                            <small
-                                th:errors="*{categoria.id}"
-                                th:if="${#fields.hasErrors('categoria.id')}"
-                            >
-                            </small>
-
                         </select>
 
                     </div>
+
+                    <small
+                        th:errors="*{categoria.id}"
+                        th:if="${#fields.hasErrors('categoria.id')}"
+                    >
+                    </small>
 
                 </div>
 
