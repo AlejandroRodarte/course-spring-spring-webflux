@@ -24,12 +24,19 @@
                 th:action="@{/form}"
                 method="post"
                 th:object="${producto}"
+                enctype="multipart/form-data"
             >
 
 <!--                <input-->
 <!--                    type="hidden"-->
 <!--                    th:if="${producto.id != null}"-->
 <!--                    th:field="*{id}"-->
+<!--                />-->
+
+<!--                <input-->
+<!--                    type="hidden"-->
+<!--                    th:if="${producto.foto != null}"-->
+<!--                    th:field="*{foto}"-->
 <!--                />-->
 
                 <div>
@@ -127,6 +134,23 @@
                         th:if="${#fields.hasErrors('categoria.id')}"
                     >
                     </small>
+
+                </div>
+
+                <div>
+
+                    <label for="file">
+                        Foto
+                    </label>
+
+                    <div>
+
+                        <input
+                            type="file"
+                            name="file"
+                        />
+
+                    </div>
 
                 </div>
 

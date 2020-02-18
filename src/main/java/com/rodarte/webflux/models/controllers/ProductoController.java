@@ -6,6 +6,8 @@ import com.rodarte.webflux.models.services.ProductoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,8 +18,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.time.Duration;
 import java.util.Date;
+import java.util.UUID;
 
 @SessionAttributes("producto")
 @Controller
@@ -25,6 +29,9 @@ public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
+
+    @Value("${config.uploads.path}")
+    private String path;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductoController.class);
 
@@ -67,7 +74,8 @@ public class ProductoController {
         @Valid @ModelAttribute("producto") Producto producto,
         BindingResult bindingResult,
         Model model,
-        SessionStatus sessionStatus
+        SessionStatus sessionStatus,
+        @RequestPart(name = "file") FilePart filePart
     ) {
 
         if (bindingResult.hasErrors()) {
@@ -96,6 +104,18 @@ public class ProductoController {
                             producto.setCreatedAt(new Date());
                         }
 
+                        if (!filePart.filename().isEmpty()) {
+                            producto.setFoto(
+                                UUID.randomUUID().toString() +
+                                "-" +
+                                filePart
+                                    .filename()
+                                    .replace(" ", "")
+                                    .replace(":", "")
+                                    .replace("\\", "")
+                            );
+                        }
+
                         return productoService.save(producto);
 
                     }
@@ -103,6 +123,15 @@ public class ProductoController {
                 .doOnNext(p -> {
                     logger.info("Categoria asignada: " + p.getCategoria().getNombre() + " Id Cat: " + p.getCategoria().getId());
                     logger.info("Producto guardado: " + p.getNombre() + " Id: " + p.getId());
+                })
+                .flatMap(p -> {
+
+                    if (!filePart.filename().isEmpty()) {
+                        return filePart.transferTo(new File(this.path + p.getFoto()));
+                    }
+
+                    return Mono.empty();
+
                 })
                 .thenReturn("redirect:/listar?success=producto+guardado+con+exito");
 
