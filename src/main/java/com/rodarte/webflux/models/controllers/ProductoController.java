@@ -1,5 +1,6 @@
 package com.rodarte.webflux.models.controllers;
 
+import com.rodarte.webflux.models.documents.Categoria;
 import com.rodarte.webflux.models.documents.Producto;
 import com.rodarte.webflux.models.services.ProductoService;
 import org.slf4j.Logger;
@@ -26,6 +27,11 @@ public class ProductoController {
     private ProductoService productoService;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductoController.class);
+
+    @ModelAttribute("categorias")
+    public Flux<Categoria> categorias() {
+        return productoService.findAllCategoria();
+    }
 
     @GetMapping({ "/", "/listar" })
     public Mono<String> listar(Model model) {

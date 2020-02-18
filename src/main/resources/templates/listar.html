@@ -53,6 +53,10 @@
                     </th>
 
                     <th>
+                        categoria
+                    </th>
+
+                    <th>
                         editar
                     </th>
 
@@ -72,6 +76,7 @@
                     <td th:text="${producto.nombre}"></td>
                     <td th:text="${producto.precio}"></td>
                     <td th:text="${producto.createdAt}"></td>
+                    <td th:text="${producto.categoria.nombre}"></td>
 
                     <td>
                         <a th:href="@{/form/} + ${producto.id}">

@@ -97,6 +97,41 @@
 
                 <div>
 
+                    <label for="categoria.id">
+                        Categoria
+                    </label>
+
+                    <div>
+
+                        <select
+                            th:field="*{categoria.id}"
+                        >
+
+                            <option value="">
+                                -- seleccionar --
+                            </option>
+
+                            <option
+                                th:each="categoria: ${categorias}"
+                                th:value="${categoria.id}"
+                                th:text="${categoria.nombre}"
+                            >
+                            </option>
+
+                            <small
+                                th:errors="*{categoria.id}"
+                                th:if="${#fields.hasErrors('categoria.id')}"
+                            >
+                            </small>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div>
+
                     <div>
 
                         <input
