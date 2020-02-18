@@ -12,6 +12,18 @@
 
     <body>
 
+        <div
+            th:text="${param.error}"
+            th:if="${param.error != null}"
+        >
+        </div>
+
+        <div
+            th:text="${param.success}"
+            th:if="${param.success != null}"
+        >
+        </div>
+
         <h1 th:text="${titulo}"></h1>
 
         <a th:href="@{/form}">
@@ -58,7 +70,7 @@
                     <td th:text="${producto.createdAt}"></td>
 
                     <td>
-                        <a th:href="@{/form/} + ${producto.id}">
+                        <a th:href="@{/form-v2/} + ${producto.id}">
                             editar
                         </a>
                     </td>

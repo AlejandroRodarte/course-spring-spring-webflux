@@ -26,11 +26,11 @@
                 th:object="${producto}"
             >
 
-<!--                <input-->
-<!--                    type="hidden"-->
-<!--                    th:if="${producto.id != null}"-->
-<!--                    th:field="*{id}"-->
-<!--                />-->
+                <input
+                    type="hidden"
+                    th:if="${producto.id != null}"
+                    th:field="*{id}"
+                />
 
                 <div>
 
@@ -89,7 +89,7 @@
 
                         <input
                             type="submit"
-                            value="Crear"
+                            th:value="${boton}"
                         />
 
                     </div>
