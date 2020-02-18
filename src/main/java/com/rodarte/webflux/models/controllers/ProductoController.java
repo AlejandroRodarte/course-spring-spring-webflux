@@ -7,16 +7,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
 import java.time.Duration;
+import java.util.Date;
 
 @SessionAttributes("producto")
 @Controller
@@ -57,16 +57,34 @@ public class ProductoController {
     }
 
     @PostMapping("/form")
-    public Mono<String> guardar(Producto producto, SessionStatus sessionStatus) {
+    public Mono<String> guardar(
+        @Valid @ModelAttribute("producto") Producto producto,
+        BindingResult bindingResult,
+        Model model,
+        SessionStatus sessionStatus
+    ) {
+
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("titulo", "Errores en el formulario producto");
+            model.addAttribute("boton", "Guardar");
+
+            return Mono.just("form");
+
+        }
 
         sessionStatus.setComplete();
+
+        if (producto.getCreatedAt() == null) {
+            producto.setCreatedAt(new Date());
+        }
 
         // thenReturn: permite retornar un Mono cuando un Observable completa; permitira redirigir cuando
         // el producto haya sido salvado
         return productoService
                 .save(producto)
                 .doOnNext(p -> logger.info("Producto guardado: " + p.getNombre() + " Id: " + p.getId()))
-                .thenReturn("redirect:/listar");
+                .thenReturn("redirect:/listar?success=producto+guardado+con+exito");
 
     }
 

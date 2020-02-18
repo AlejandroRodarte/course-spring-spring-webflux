@@ -26,11 +26,11 @@
                 th:object="${producto}"
             >
 
-                <input
-                    type="hidden"
-                    th:if="${producto.id != null}"
-                    th:field="*{id}"
-                />
+<!--                <input-->
+<!--                    type="hidden"-->
+<!--                    th:if="${producto.id != null}"-->
+<!--                    th:field="*{id}"-->
+<!--                />-->
 
                 <div>
 
@@ -46,6 +46,12 @@
                         />
 
                     </div>
+
+                    <small
+                        th:errors="*{nombre}"
+                        th:if="${#fields.hasErrors('nombre')}"
+                    >
+                    </small>
 
                 </div>
 
@@ -63,6 +69,12 @@
                         />
 
                     </div>
+
+                    <small
+                        th:errors="*{precio}"
+                        th:if="${#fields.hasErrors('precio')}"
+                    >
+                    </small>
 
                 </div>
 
