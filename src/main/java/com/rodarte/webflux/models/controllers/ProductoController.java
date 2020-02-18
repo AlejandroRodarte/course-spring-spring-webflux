@@ -8,13 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
+@SessionAttributes("producto")
 @Controller
 public class ProductoController {
 
@@ -52,7 +56,9 @@ public class ProductoController {
     }
 
     @PostMapping("/form")
-    public Mono<String> guardar(Producto producto) {
+    public Mono<String> guardar(Producto producto, SessionStatus sessionStatus) {
+
+        sessionStatus.setComplete();
 
         // thenReturn: permite retornar un Mono cuando un Observable completa; permitira redirigir cuando
         // el producto haya sido salvado
@@ -60,6 +66,22 @@ public class ProductoController {
                 .save(producto)
                 .doOnNext(p -> logger.info("Producto guardado: " + p.getNombre() + " Id: " + p.getId()))
                 .thenReturn("redirect:/listar");
+
+    }
+
+    @GetMapping("/form/{id}")
+    public Mono<String> editar(@PathVariable String id, Model model) {
+
+        Mono<Producto> producto =
+            productoService
+                .findById(id)
+                .doOnNext(p -> logger.info("Producto: " + p.getNombre()))
+                .defaultIfEmpty(new Producto());
+
+        model.addAttribute("titulo", "Editar Producto");
+        model.addAttribute("producto", producto);
+
+        return Mono.just("form");
 
     }
 

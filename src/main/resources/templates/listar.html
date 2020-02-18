@@ -40,6 +40,10 @@
                         fecha
                     </th>
 
+                    <th>
+                        editar
+                    </th>
+
                 </tr>
 
             </thead>
@@ -47,10 +51,18 @@
             <tbody>
 
                 <tr th:each="producto: ${productos}">
+
                     <td th:text="${producto.id}"></td>
                     <td th:text="${producto.nombre}"></td>
                     <td th:text="${producto.precio}"></td>
                     <td th:text="${producto.createdAt}"></td>
+
+                    <td>
+                        <a th:href="@{/form/} + ${producto.id}">
+                            editar
+                        </a>
+                    </td>
+
                 </tr>
 
             </tbody>
