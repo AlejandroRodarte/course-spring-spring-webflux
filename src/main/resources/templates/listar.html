@@ -56,6 +56,10 @@
                         editar
                     </th>
 
+                    <th>
+                        eliminar
+                    </th>
+
                 </tr>
 
             </thead>
@@ -72,6 +76,15 @@
                     <td>
                         <a th:href="@{/form/} + ${producto.id}">
                             editar
+                        </a>
+                    </td>
+
+                    <td>
+                        <a
+                            th:href="@{/eliminar/} + ${producto.id}"
+                            onclick="return confirm('estas seguro que desea eliminar?')"
+                        >
+                            eliminar
                         </a>
                     </td>
 
