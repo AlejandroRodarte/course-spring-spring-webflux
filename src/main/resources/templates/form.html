@@ -1,10 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
+<html
+    lang="en"
+    xmlns:th="http://www.thymeleaf.org"
+>
+
+    <head>
+        <meta charset="UTF-8">
+        <title th:text="${titulo}">Title</title>
+    </head>
+
+    <body>
+
+        <h1 th:text="${titulo}"></h1>
+
+        <a th:href="@{/listar}">
+           volver
+        </a>
+
+        <div>
+
+            <form
+                th:action="@{/form}"
+                method="post"
+                th:object="${producto}"
+            >
+
+                <div>
+
+                    <label for="nombre">
+                        Nombre
+                    </label>
+
+                    <div>
+
+                        <input
+                            type="text"
+                            th:field="*{nombre}"
+                        />
+
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <label for="precio">
+                        Precio
+                    </label>
+
+                    <div>
+
+                        <input
+                            type="number"
+                            th:field="*{precio}"
+                        />
+
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <label for="createdAt">
+                        Fecha
+                    </label>
+
+                    <div>
+
+                        <input
+                            type="date"
+                            th:field="*{createdAt}"
+                        />
+
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <div>
+
+                        <input
+                            type="submit"
+                            value="Crear"
+                        />
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </body>
+
 </html>
