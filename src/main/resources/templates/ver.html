@@ -20,6 +20,15 @@
 
         <div>
 
+            <div>
+                <img
+                    th:src="@{/uploads/img/} + ${producto.foto}"
+                    th:alt="${producto.nombre}"
+                    th:if="${producto.foto != null && #strings.length(producto.foto) > 0}"
+                    style="max-width: 25%;"
+                />
+            </div>
+
             <ul>
 
                 <li th:text="${producto.nombre}">
